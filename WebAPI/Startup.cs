@@ -32,15 +32,16 @@ namespace WebAPI
         {
             //Autofac, Ninject,CastleWindsor, structureMap, LightInject, dryInject -->IoC Container
             //AOP
+            //Postsharp ücretli þuan ama kurumsalda bu kullanýlýyor
             services.AddControllers();
 
             /*singleton kaç tane istek gelirse gelsin 1 tane oluþturur
             * içinde data tutulmuyorsa singleton kullanýlmalýdýr.
             */
-            services.AddSingleton<IProductService,ProductManager>();
-            //ProductManager new lenirken IProductDal new leyemedi o yüzden onuda burada yolunu vermiþ olduk.
-            services.AddSingleton<IProductDal, EfProductDal>();
-
+            //services.AddSingleton<IProductService,ProductManager>();
+            ////ProductManager new lenirken IProductDal new leyemedi o yüzden onuda burada yolunu vermiþ olduk.
+            //services.AddSingleton<IProductDal, EfProductDal>();
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPI", Version = "v1" });
