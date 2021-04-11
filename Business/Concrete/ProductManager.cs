@@ -39,10 +39,38 @@ namespace Business.Concrete
             //    return new ErrorResult(Messages.ProductNameInvalid);
             //}
 
+            //Aynı isimde ürün eklenemez yap bunu
+            if(CheckIfProductCountOfCategoryCorrect(product.CategoryId).Success)
+            {
+                _productDal.Add(product);
+                return new SuccessResult(Messages.ProductAdded);
 
-            _productDal.Add(product);
-            return new Result(true,Messages.ProductAdded);
+            }
+            return new ErrorResult();
         }
+
+        private IResult CheckIfProductCountOfCategoryCorrect(int categoryId)
+        {
+            var result = _productDal.GetAll(p => p.CategoryId == categoryId).Count;
+
+            if (result >= 10)
+            {
+                return new ErrorResult(Messages.ProductCountOfCategoryError);
+            }
+            return new SuccessResult();
+        }
+
+        public IResult Update(Product product)
+        {
+            if (CheckIfProductCountOfCategoryCorrect(product.CategoryId).Success)
+            {
+                _productDal.Update(product);
+                return new SuccessResult(Messages.ProductAdded);
+
+            }
+            return new ErrorResult();
+        }
+
 
         public IDataResult<List<Product>> GetAll()
         {
@@ -73,5 +101,7 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<List<ProductDetailDto>>(_productDal.GetProductDetails());
         }
+
+
     }
 }
