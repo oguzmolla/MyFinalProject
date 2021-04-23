@@ -1,6 +1,8 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Business;
 using Core.Utilities.Results;
@@ -26,7 +28,10 @@ namespace Business.Concrete
             _categoryService = categoryService;
         }
 
+        [SecuredOperation("productadd,admin")]
         [ValidationAspect(typeof(ProductValidator))]
+        //Bu methos productservice te olan tüm getlerin cache lerini temizler
+        [CacheRemoveAspect("IProductService.Get")]
         public IResult Add(Product product)
         {
             // iş kodları
@@ -111,7 +116,7 @@ namespace Business.Concrete
             return new ErrorResult();
         }
 
-
+        [CacheAspect()]
         public IDataResult<List<Product>> GetAll()
         {
             // iş kodları
